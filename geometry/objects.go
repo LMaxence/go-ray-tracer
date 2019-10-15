@@ -6,9 +6,10 @@ import (
 )
 
 type Sphere struct {
-	Center Point
-	Radius float64
-	Color  color.RGBA
+	Center   Point
+	Radius   float64
+	Color    color.RGBA
+	Specular float64
 }
 
 func (s Sphere) Intersect(o Point, d Point) (float64, float64) {
@@ -29,4 +30,12 @@ func (s Sphere) Intersect(o Point, d Point) (float64, float64) {
 
 func (s Sphere) GetColor() color.RGBA {
 	return s.Color
+}
+
+func (s Sphere) GetSpecular() float64 {
+	return s.Specular
+}
+
+func (s Sphere) GetNormal(p Point) Point {
+	return Normalize(p.Diff(s.Center))
 }

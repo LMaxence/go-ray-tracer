@@ -35,8 +35,28 @@ func (r Ray) Trace(s Scene, tMin float64, tMax float64) color.RGBA {
 		}
 	}
 	// fmt.Print("\n")
+	var col color.RGBA
 	if closestElt == nil {
-		return s.BackgroundColor
+		col = s.BackgroundColor
+	} else {
+		col = closestElt.GetColor()
+		p := r.pos(closestT)
+
+		i := 0.0
+		for _, light := range s.Lights {
+			i += light.ComputeLight(
+				p,
+				closestElt.GetNormal(p),
+				geometry.Scale(geometry.Normalize(r.V), -1),
+				closestElt.GetSpecular(),
+			)
+		}
+
+		i = math.Min(i, 1)
+		col.R = uint8(float64(col.R) * i)
+		col.G = uint8(float64(col.G) * i)
+		col.B = uint8(float64(col.B) * i)
 	}
-	return closestElt.GetColor()
+
+	return col
 }

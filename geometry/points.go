@@ -35,3 +35,22 @@ func Dist(p1 Point, p2 Point) float64 {
 	dz := math.Pow(p1.Z-p2.Z, 2)
 	return math.Sqrt(dx + dy + dz)
 }
+
+func Norm(p Point) float64 {
+	return Dist(p, Point{0, 0, 0})
+}
+
+func Scale(p Point, a float64) Point {
+	return Point{
+		X: p.X * a,
+		Y: p.Y * a,
+		Z: p.Z * a,
+	}
+}
+
+func Normalize(p Point) Point {
+	if Norm(p) > 0 {
+		return Scale(p, 1/Norm(p))
+	}
+	return p
+}
